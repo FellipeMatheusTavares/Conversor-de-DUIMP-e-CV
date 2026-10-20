@@ -1,0 +1,426 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Central de Conversões - RENAVAM</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+    background: #f3f6fb;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+}
+
+.container {
+    width: 100%;
+    max-width: 1100px;
+}
+
+.header {
+    background: #0B5ED7;
+    color: white;
+    padding: 22px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+}
+
+.conversores {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    background: white;
+    padding: 25px;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,.15);
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 25px;
+    min-width: 0;
+}
+
+.card h2 {
+    color: #0B5ED7;
+    font-size: 21px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #0B5ED7;
+}
+
+input[readonly] {
+    background: #f4f4f4;
+    font-weight: bold;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 10px 0 25px;
+}
+
+button {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: opacity .2s;
+}
+
+button:hover {
+    opacity: .85;
+}
+
+.calcular {
+    background: #0B5ED7;
+    color: white;
+}
+
+.limpar {
+    background: #6C757D;
+    color: white;
+}
+
+.copiar {
+    background: #198754;
+    color: white;
+}
+
+.fechar {
+    background: #DC3545;
+    color: white;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.msg {
+    margin-top: 15px;
+    color: #DC3545;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: pre-line;
+    min-height: 20px;
+}
+
+.descricao {
+    font-size: 13px;
+    color: #666;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.rodape {
+    display: flex;
+    justify-content: center;
+    padding-top: 25px;
+}
+
+@media (max-width: 750px) {
+    .conversores {
+        grid-template-columns: 1fr;
+    }
+
+    .header {
+        font-size: 20px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        Central de Conversões - RENAVAM
+    </div>
+
+    <div class="conversores">
+
+        <div class="card">
+
+            <h2>Conversor DUIMP → DI</h2>
+
+            <label for="duimp">DUIMP</label>
+            <input
+                id="duimp"
+                placeholder="26BR0000883797-0"
+                autocomplete="off"
+            >
+
+            <div class="buttons">
+                <button class="calcular" onclick="calcularDI()">
+                    Calcular
+                </button>
+
+                <button class="limpar" onclick="limparDI()">
+                    Limpar
+                </button>
+            </div>
+
+            <label for="resultadoDI">DI Equivalente</label>
+            <input id="resultadoDI" readonly>
+
+            <div class="footer">
+                <button class="copiar"
+                    onclick="copiarResultado('resultadoDI', 'DI')">
+                    Copiar DI
+                </button>
+            </div>
+
+            <div id="mensagemDI" class="msg"
+                 role="status"></div>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Conversor kW / HP → CV</h2>
+
+            <label for="potencia">Potência</label>
+            <input
+                id="potencia"
+                type="text"
+                inputmode="decimal"
+                placeholder="Ex: 100"
+                autocomplete="off"
+            >
+
+            <label for="unidade">Unidade de origem</label>
+            <select id="unidade">
+                <option value="kw">Quilowatt (kW)</option>
+                <option value="hp">Horsepower (HP)</option>
+            </select>
+
+            <div class="buttons">
+                <button class="calcular" onclick="calcularCV()">
+                    Converter
+                </button>
+
+                <button class="limpar" onclick="limparCV()">
+                    Limpar
+                </button>
+            </div>
+
+            <label for="resultadoCV">Resultado em CV</label>
+            <input id="resultadoCV" readonly>
+
+            <div class="footer">
+                <button class="copiar"
+                    onclick="copiarResultado('resultadoCV', 'CV')">
+                    Copiar CV
+                </button>
+            </div>
+
+            <div id="mensagemCV" class="msg"
+                 role="status"></div>
+
+            <p class="descricao">
+                1 kW ≈ 1,35962 CV |
+                1 HP ≈ 1,01387 CV
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function calcularDV(numero) {
+    const pesos = [2,3,4,5,6,7,8,9];
+
+    let soma = 0;
+    let peso = 0;
+
+    for (let i = numero.length - 1; i >= 0; i--) {
+        soma += parseInt(numero[i]) * pesos[peso];
+
+        peso++;
+
+        if (peso === pesos.length) {
+            peso = 0;
+        }
+    }
+
+    let resto = soma % 11;
+    let dv = 11 - resto;
+
+    if (dv >= 10) {
+        dv = 0;
+    }
+
+    return dv;
+}
+
+function converterDUIMP(duimp) {
+    duimp = duimp.trim().toUpperCase();
+
+    const regex = /^\d{2}BR\d{10}-\d$/;
+
+    if (!regex.test(duimp)) {
+        throw new Error(
+            "Formato inválido.\nExemplo: 26BR0000883797-0"
+        );
+    }
+
+    let partes = duimp.split("-");
+    let base = partes[0];
+
+    let ano = base.substring(0,2);
+    let sequencial = base.substring(4);
+
+    sequencial = sequencial.substring(3);
+
+    let numero = ano + sequencial;
+    let dv = calcularDV("2" + numero);
+
+    return numero + "-" + dv;
+}
+
+function calcularDI() {
+    const mensagem = document.getElementById("mensagemDI");
+    const resultado = document.getElementById("resultadoDI");
+
+    mensagem.textContent = "";
+
+    try {
+        resultado.value = converterDUIMP(
+            document.getElementById("duimp").value
+        );
+    } catch (erro) {
+        resultado.value = "";
+        mensagem.textContent = erro.message;
+    }
+}
+
+function limparDI() {
+    document.getElementById("duimp").value = "";
+    document.getElementById("resultadoDI").value = "";
+    document.getElementById("mensagemDI").textContent = "";
+    document.getElementById("duimp").focus();
+}
+
+function calcularCV() {
+    const campo = document.getElementById("potencia");
+    const unidade = document.getElementById("unidade").value;
+    const resultado = document.getElementById("resultadoCV");
+    const mensagem = document.getElementById("mensagemCV");
+
+    mensagem.textContent = "";
+    resultado.value = "";
+
+    const texto = campo.value.trim().replace(",", ".");
+
+    if (texto === "" || !/^\d+(\.\d+)?$/.test(texto)) {
+        mensagem.textContent =
+            "Informe uma potência válida.";
+        return;
+    }
+
+    const potencia = Number(texto);
+
+    if (!Number.isFinite(potencia)) {
+        mensagem.textContent =
+            "Informe uma potência válida.";
+        return;
+    }
+
+    let cv;
+
+    if (unidade === "kw") {
+        cv = potencia * 1.3596216173;
+    } else {
+        cv = potencia * 1.0138696654;
+    }
+
+    resultado.value = cv.toFixed(2).replace(".", ",");
+}
+
+function limparCV() {
+    document.getElementById("potencia").value = "";
+    document.getElementById("resultadoCV").value = "";
+    document.getElementById("mensagemCV").textContent = "";
+    document.getElementById("unidade").value = "kw";
+    document.getElementById("potencia").focus();
+}
+
+async function copiarResultado(id, tipo) {
+    const texto = document.getElementById(id).value;
+
+    if (!texto) {
+        return;
+    }
+
+    try {
+        await navigator.clipboard.writeText(texto);
+        alert(tipo + " copiado para a área de transferência.");
+    } catch (erro) {
+        alert("Não foi possível copiar automaticamente.");
+    }
+}
+
+document.getElementById("duimp")
+    .addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+            calcularDI();
+        }
+    });
+
+document.getElementById("potencia")
+    .addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+            calcularCV();
+        }
+    });
+
+</script>
+
+</body>
+</html>
